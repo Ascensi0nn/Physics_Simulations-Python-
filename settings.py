@@ -7,7 +7,7 @@ WIN = main.WIN
 FPS = main.FPS
 BLACK = (0,0,0)
 
-ball_size = 45
+ball_size = 30
 
 options = pygame.transform.scale(pygame.image.load("options.png"), (50, 50))
 
@@ -20,7 +20,7 @@ def change_ball_size():
 
 def draw_window():
     WIN.fill((239, 231, 211), (0, 0, WIDTH, HEIGHT))
-    WIN.blit(options, (int(WIDTH / 2 - options.get_width() / 2), 50))
+    WIN.blit(options, (100, 50))
 
     font = pygame.font.SysFont('helvetica', 24)
     size = font.render("Ball Size: " + str(round(ball_size)), True, BLACK)
