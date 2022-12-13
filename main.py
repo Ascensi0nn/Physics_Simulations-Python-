@@ -18,7 +18,7 @@ def start_proj_motion():
 
 def start_obj_collision():
     obj_collision.start()
-
+    
 def start_pendulum():
     pendulum.start()
 
