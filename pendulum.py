@@ -46,9 +46,12 @@ def move_ball():
     ang_frequency = (2 * math.pi) / period
     amplitude = length * math.sin(math.radians(abs(max_angle)))
     phase = (math.pi / 2)
+
+    # x position
     x = amplitude * math.sin(ang_frequency * time - phase)
     ball_x = WIDTH / 2 + x - BALL_SIZE / 2
 
+    # y position
     y = math.sqrt(math.pow(length, 2) - math.pow(x, 2))
     ball_y = y - BALL_SIZE / 2 + triangle_height
 
@@ -101,19 +104,20 @@ def draw_background_graph():
 def draw_speed_arrows():
     global time, current_angle
 
-    LINE_CONSTANT = 1
+    LINE_CONSTANT = 0.07
     LINE_WIDTH = 3
     ARROW_CONSTANT = 6
+    ARROW_CONSTANT_X = ARROW_CONSTANT
+    ARROW_CONSTANT_Y = ARROW_CONSTANT
 
     period = 2 * math.pi * math.sqrt((length / 100) / (-1 * gravity))
-    amplitude = length * math.sin(math.radians(abs(max_angle)))
+    amplitude = (length / 100) * math.sin(math.radians(abs(max_angle)))
     ang_frequency = (2 * math.pi) / period
 
-    vel = -1 * amplitude * ang_frequency * math.sin(ang_frequency * time)
-    vel_x = vel * math.cos(current_angle)       # maybe not current angle
-    vel_y = vel * math.sin(current_angle)       # "                     "
+    vel = amplitude * ang_frequency * math.sin(ang_frequency * time)
+    vel_x = vel * math.cos(math.radians(current_angle))       # maybe not current angle
+    vel_y = vel * math.sin(math.radians(current_angle))       # "                     "
 
-    line_length = vel / LINE_CONSTANT
     x_line_length = vel_x / LINE_CONSTANT
     y_line_length = vel_y / LINE_CONSTANT
 
@@ -121,20 +125,35 @@ def draw_speed_arrows():
     v(t) = -1 * A * w * math.sin(wt)            ==> speed arrows
     '''
 
+    if vel_x >= 0:
+        ARROW_CONSTANT_X = -1 * abs(ARROW_CONSTANT_X)
+    else:
+        ARROW_CONSTANT_Y = abs(ARROW_CONSTANT_X)
+
+    if vel_y >= 0:
+        ARROW_CONSTANT_Y = -1 * abs(ARROW_CONSTANT_Y)
+    else:
+        ARROW_CONSTANT_Y = abs(ARROW_CONSTANT_Y)
+
     # X
     pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2, ball_y + BALL_SIZE / 2), (ball_x + BALL_SIZE / 2 + x_line_length, ball_y + BALL_SIZE / 2), LINE_WIDTH)
+    pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2 + x_line_length, ball_y + BALL_SIZE / 2), (ball_x + BALL_SIZE / 2 + x_line_length + ARROW_CONSTANT_X, ball_y + BALL_SIZE / 2 + ARROW_CONSTANT_Y), LINE_WIDTH)
+    pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2 + x_line_length, ball_y + BALL_SIZE / 2), (ball_x + BALL_SIZE / 2 + x_line_length + ARROW_CONSTANT_X, ball_y + BALL_SIZE / 2 - ARROW_CONSTANT_Y), LINE_WIDTH)
 
     # Y
     pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2, ball_y + BALL_SIZE / 2), (ball_x + BALL_SIZE / 2, ball_y + BALL_SIZE / 2 + y_line_length), LINE_WIDTH)
+    pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2, ball_y + BALL_SIZE / 2 + y_line_length), (ball_x + BALL_SIZE / 2 - ARROW_CONSTANT_X, ball_y + BALL_SIZE / 2 + y_line_length + ARROW_CONSTANT_Y), LINE_WIDTH)
+    pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2, ball_y + BALL_SIZE / 2 + y_line_length), (ball_x + BALL_SIZE / 2 + ARROW_CONSTANT_X, ball_y + BALL_SIZE / 2 + y_line_length + ARROW_CONSTANT_Y), LINE_WIDTH)
 
-    # VEL
+    # Tangential vel
     pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2, ball_y + BALL_SIZE / 2), (ball_x + BALL_SIZE / 2 + x_line_length, ball_y + BALL_SIZE / 2 + y_line_length), LINE_WIDTH)
+    if vel >= 0:
+        pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2 + x_line_length, ball_y + BALL_SIZE / 2 + y_line_length), (ball_x + BALL_SIZE / 2 + x_line_length - ARROW_CONSTANT * math.sin(math.radians(current_angle + 45)), ball_y + BALL_SIZE / 2 + y_line_length + ARROW_CONSTANT * math.cos(math.radians(current_angle + 45))), LINE_WIDTH)  # good
+        pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2 + x_line_length, ball_y + BALL_SIZE / 2 + y_line_length), (ball_x + BALL_SIZE / 2 + x_line_length - ARROW_CONSTANT * math.sin(math.radians(current_angle + 135)), ball_y + BALL_SIZE / 2 + y_line_length + ARROW_CONSTANT * math.cos(math.radians(current_angle + 135))), LINE_WIDTH)  # good
+    else:
+        pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2 + x_line_length, ball_y + BALL_SIZE / 2 + y_line_length), (ball_x + BALL_SIZE / 2 + x_line_length - ARROW_CONSTANT * math.sin(math.radians(current_angle - 45)), ball_y + BALL_SIZE / 2 + y_line_length + ARROW_CONSTANT * math.cos(math.radians(current_angle - 45))), LINE_WIDTH)  # good
+        pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE / 2 + x_line_length, ball_y + BALL_SIZE / 2 + y_line_length), (ball_x + BALL_SIZE / 2 + x_line_length - ARROW_CONSTANT * math.sin(math.radians(current_angle - 135)), ball_y + BALL_SIZE / 2 + y_line_length + ARROW_CONSTANT * math.cos(math.radians(current_angle - 135))), LINE_WIDTH)  # good
 
-    '''
-    pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE, ball_y + BALL_SIZE / 2), (ball_x + BALL_SIZE + x_line_length, ball_red_y + BALL_SIZE / 2), width=LINE_WIDTH)
-    pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE + x_line_length, ball_y + BALL_SIZE / 2), (ball_x + BALL_SIZE + x_line_length - ARROW_CONSTANT, ball_y + BALL_SIZE / 2 + ARROW_CONSTANT), width=LINE_WIDTH)
-    pygame.draw.line(WIN, BLACK, (ball_x + BALL_SIZE + x_line_length, ball_y + BALL_SIZE / 2), (ball_x + BALL_SIZE + x_line_length - ARROW_CONSTANT, ball_y + BALL_SIZE / 2 - ARROW_CONSTANT), width=LINE_WIDTH)
-    '''
 
 def draw_triangle():
     line_width = 8
