@@ -177,7 +177,16 @@ def draw_window():
     pygame.display.update()
 
 def start():
-    global launch
+    global launch, BALL_SIZE
+    global ball_blue, ball_blue_y
+    global ball_red, ball_red_y
+
+    BALL_SIZE = settings.ball_size
+    ball_red = pygame.transform.scale(pygame.image.load("ballred.png"), (BALL_SIZE, BALL_SIZE))
+    ball_blue = pygame.transform.scale(pygame.image.load("ballblue.png"), (BALL_SIZE, BALL_SIZE))
+    ball_red_y = GROUND_HEIGHT - BALL_SIZE
+    ball_blue_y = GROUND_HEIGHT - BALL_SIZE
+
 
     pygame.display.set_caption("Object Collision Simulator")
     clock = pygame.time.Clock()

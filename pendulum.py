@@ -190,7 +190,10 @@ def draw_window():
     pygame.display.update()
 
 def start():
-    global launch, ball_x, ball_y, current_angle
+    global launch, ball_x, ball_y, current_angle, BALL_SIZE, ball
+
+    BALL_SIZE = settings.ball_size
+    ball = pygame.transform.scale(pygame.image.load("ball.png"), (BALL_SIZE, BALL_SIZE))
 
     pygame.display.set_caption("Object Collision Simulator")
     clock = pygame.time.Clock()

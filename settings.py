@@ -1,4 +1,5 @@
 import pygame
+import pygame_menu
 import main
 
 WIDTH = main.WIDTH
@@ -11,12 +12,9 @@ ball_size = 30
 
 options = pygame.transform.scale(pygame.image.load("options.png"), (50, 50))
 
-def change_ball_size():
+def change_ball_size(x):
     global ball_size
-    if ball_size < 100:
-        ball_size += 5
-    else:
-        ball_size = 5
+    ball_size = x
 
 def draw_window():
     WIN.fill((239, 231, 211), (0, 0, WIDTH, HEIGHT))
@@ -28,18 +26,17 @@ def draw_window():
 
     pygame.display.update()
 
-def start():
-    pygame.display.set_caption("*Settings*")
-    clock = pygame.time.Clock()
-    run = True
-
-    while run:
-        clock.tick(FPS)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    run = False
-        draw_window()
+def go_back():
     main.begin()
+
+def start():
+    settings = pygame_menu.Menu('Settings', WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_SOLARIZED)
+    settings.add.range_slider(
+        'Ball Size',
+        30,
+        (1,100),
+        1,
+        change_ball_size
+    )
+    settings.add.button('Return', go_back)
+    settings.mainloop(WIN)

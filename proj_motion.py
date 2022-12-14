@@ -33,10 +33,13 @@ shot = False
 ball_hit = False
 
 def init_vars():
-    global vel_x, vel_yi, BALL_STARTING_POINT, ball_x, ball_y, ground_height
+    global vel_x, vel_yi, BALL_STARTING_POINT, ball_x, ball_y, ground_height, ball, BALL_SIZE
 
     BALL_STARTING_POINT[0] = 100
     BALL_STARTING_POINT[1] = HEIGHT - BALL_SIZE - ball_starting_height
+
+    BALL_SIZE = settings.ball_size
+    ball = pygame.transform.scale(pygame.image.load("ball.png"), (BALL_SIZE, BALL_SIZE))
 
     ball_x, ball_y = BALL_STARTING_POINT[0], BALL_STARTING_POINT[1]
 
@@ -215,7 +218,7 @@ def draw_path():
         pygame.draw.circle(WIN, (255, 0, 0), (selected_items_0[i] + BALL_SIZE / 2, selected_items_1[i] + BALL_SIZE / 2), circle_radius)
 
 def start():
-    global shot, angle, ball_x, ball_y
+    global shot, angle, ball_x, ball_y, BALL_SIZE
 
     pygame.display.set_caption("Projectile Motion Simulator")
     clock = pygame.time.Clock()
