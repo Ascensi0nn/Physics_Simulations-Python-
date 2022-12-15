@@ -15,6 +15,7 @@ options = pygame.transform.scale(pygame.image.load("options.png"), (50, 50))
 def change_ball_size(x):
     global ball_size
     ball_size = x
+    
 
 def draw_window():
     WIN.fill((239, 231, 211), (0, 0, WIDTH, HEIGHT))
@@ -32,11 +33,12 @@ def go_back():
 def start():
     settings = pygame_menu.Menu('Settings', WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_SOLARIZED)
     settings.add.range_slider(
-        'Ball Size',
-        30,
-        (1,100),
-        1,
-        change_ball_size
+        title='Ball Size',
+        default=30,
+        range_values=(1,100),
+        increment=1,
+        onchange=change_ball_size,
+        onreturn=change_ball_size
     )
     settings.add.button('Return', go_back)
     settings.mainloop(WIN)

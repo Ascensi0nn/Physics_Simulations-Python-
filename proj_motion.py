@@ -80,10 +80,14 @@ def move_ball():
 
 def change_ball_angle(k):
     global angle
+    h = -1 * (HEIGHT - ball_starting_height - ground_height)
     if k[pygame.K_LEFT] and angle < 90:
         angle += 1
     if k[pygame.K_RIGHT] and angle > -90:
-        angle -= 1
+        if angle > 0:
+            angle -=1
+        elif h > 0:
+            angle -= 1
     init_vars()
 
 def change_ball_speed(k):
